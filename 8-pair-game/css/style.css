@@ -1,0 +1,48 @@
+body {
+    background-color: aliceblue;
+}
+
+.card {
+    height: 170px;
+    max-width: 120px;
+    padding: 0;
+    background-color: transparent;
+    border: none;
+    transition: transform .3s;
+    transform-style: preserve-3d;
+}
+
+.card__front, .card__back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+}
+
+.card__back {
+    transform: rotateY(0deg);
+}
+
+.card__front {
+    display: flex;
+    transform: rotateY(180deg);
+    justify-content: center;
+    align-items: center;
+}
+
+.card__front i {
+    font-size: 75px;
+    
+}
+
+.card.flipped {
+    transform: rotateY(180deg);
+}
+
+.col-2.card.found {
+    transform: rotateY(180deg);
+}
+
+.card__back img {
+    max-width: 100%;
+}
