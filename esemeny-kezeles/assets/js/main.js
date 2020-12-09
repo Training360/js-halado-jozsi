@@ -11,12 +11,27 @@
     let currentTime = 0;
     playBtn.addEventListener('click', () => isTiming = true );
     pauseBtn.addEventListener('click', () => isTiming = false );
-    resetBtn.addEventListener('click', () => currentTime = 0 );
+    resetBtn.addEventListener('click', () => {
+        currentTime = 0;
+        showTime();
+    });
 
     // Idő megjelenítése.
+    const showTime = () => {
+        let minutes = Math.floor( currentTime / 60 );
+        let seconds = currentTime % 60;
+        minutes = minutes < 10 ? '0' + minutes : minutes;
+        seconds = seconds < 10 ? '0' + seconds : seconds;
+        clock.textContent = `${minutes}:${seconds}`;
+    };
+
+    // Idő frissítése.
     setInterval( () => {
+        if (!isTiming) {
+            return;
+        }
         currentTime++;
-        clock.textContent = currentTime;
+        showTime();
     }, 1000 );
 
 
