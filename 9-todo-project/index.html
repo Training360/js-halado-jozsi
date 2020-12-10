@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header. Name of this day. -->
+        <h3 class="body__day">Tuesday</h3>
+    
+        <!-- Date. -->
+        <h3 class="body__date">2020-12-10</h3>
+    
+        <!-- Insert new todo element. -->
+        <div class="body__todo-insert">
+            <input type="text">
+            <button>
+                <i class="fa fa-plus"></i>
+            </button>
+        </div>
+    
+        <!-- Diplay todos. -->
+        <p>You have 
+            <span class="todo__number">0</span> 
+            pending items
+        </p>
+    
+        <!-- Todo list. -->
+        <div class="todo__list--pending">
+    
+        </div>
+        
+        <div class="todo__list--done">
+    
+        </div>
+    
+        <!-- Footer menu. -->
+        <div class="todo__footer">
+            <button class="footer__btn--complete">
+                Show Complete
+            </button>
+            <button class="footer__btn--clear">
+                Clear All
+            </button>
+        </div>
+    </div>
+
+    <script src="assets/js/main.js"></script>
+</body>
+</html>
