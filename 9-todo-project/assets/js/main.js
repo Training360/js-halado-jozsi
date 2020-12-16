@@ -70,7 +70,8 @@ import localDB from './localDB.js';
         }
 
         const todo = {
-            id: `todo-${Math.floor(Math.random() * 100000)}`,
+            // id: `todo-${Math.floor(Math.random() * 100000)}`,
+            id: `todo-${new Date().getTime()}`,
             text: value,
             done: false
         };
