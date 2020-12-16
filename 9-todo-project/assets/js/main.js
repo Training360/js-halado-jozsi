@@ -6,12 +6,16 @@ import localDB from './localDB.js';
     let todos = [];
     
     // Parts of date.
+    const cont = document.querySelector('.container');
     const bodyDay = document.querySelector('.body__day');
     const bodyDate = document.querySelector('.body__date');
     const todoAddBtn = document.querySelector('.todo__btn');
     const todoInput = document.querySelector('.todo__input');
     const todoListPending = document.querySelector('.todo__list--pending');
+    const todoListDone = document.querySelector('.todo__list--done');
     const pendingItems = document.querySelector('.todo__number');
+    const showHideCompletedBtn = document.querySelector('.footer__btn--complete');
+    const clearAllBtn = document.querySelector('.footer__btn--clear');
     
     const dayNames = [
         'Sunday', 
@@ -59,6 +63,9 @@ import localDB from './localDB.js';
     // Set event listeners.
     const setListeners = () => {
         todoAddBtn.addEventListener('click', addNewTodo);
+        showHideCompletedBtn.addEventListener('click', () => 
+            cont.classList.toggle('show-done'));
+        clearAllBtn.addEventListener('click', removeAllPendings);
     };
 
     // Save and add todo to the database.
@@ -89,36 +96,79 @@ import localDB from './localDB.js';
     // Show todo in the list.
     const showTodo = todo => {
         const todoItem = document.createElement('div');
-        todoListPending.appendChild(todoItem);
+        todoItem.classList.add('todo__item');
+        todoItem.setAttribute('data-todoid', todo.id);
+        
+        if (todo.done) {
+            todoListDone.appendChild(todoItem);
+        } else {
+            todoListPending.appendChild(todoItem);
+        }        
 
         todoItem.innerHTML = `
-            <input type="checkbox">
+            <input type="checkbox" ${todo.done ? 'checked' : ''}>
             <span>${todo.text}</span>
-            <button data-todoid="${todo.id}">
+            <button>
                 <i class="fa fa-trash"></i>
             </button>        
         `;
 
         const delBtn = todoItem.querySelector('button');
         delBtn.addEventListener('click', delTodo);
+
+        const checkbox = todoItem.querySelector('input');
+        checkbox.addEventListener('change', changeTodoDone);
+    };
+
+    // Change todo's done property.
+    const changeTodoDone = ev => {
+        const input = ev.currentTarget;
+        const parent = input.parentElement;
+        const todoID = parent.getAttribute('data-todoid');
+        const todoIndex = todos.findIndex( todo => todo.id === todoID );
+        
+        if (input.checked) {
+            todoListDone.appendChild(parent);
+            todos[todoIndex].done = true;
+        } else {
+            todoListPending.appendChild(parent);
+            todos[todoIndex].done = false;
+        }
+        
+        localDB.setItem('todos', todos);
+        showPending();
     };
 
     // Delete todo item.
     const delTodo = ev => {
         const button = ev.currentTarget;
         const btnParent = button.parentElement;
-        const todoID = button.getAttribute('data-todoid');
+        const todoID = btnParent.getAttribute('data-todoid');
         const todoIndex = todos.findIndex( todo => todo.id === todoID );
         
         btnParent.parentElement.removeChild(btnParent);
         todos.splice(todoIndex, 1);
         localDB.setItem('todos', todos);
+        showPending();
     };
 
     // Count pending todos.
     const showPending = () => {
         const pendingsNum = todos.filter( todo => !todo.done ).length;
         pendingItems.textContent = pendingsNum;
+    };
+
+    // Remove all pending todo.
+    const removeAllPendings = () => {
+        const allPendings = todoListPending.querySelectorAll('.todo__item');
+        allPendings.forEach( todoItem => {
+            const todoID = todoItem.getAttribute('data-todoid');
+            const todoIndex = todos.findIndex( todo => todo.id === todoID );
+            todos.splice(todoIndex, 1);
+            todoItem.parentElement.removeChild(todoItem);
+        });
+        localDB.setItem('todos', todos);
+        showPending();
     };
 
     init();
