@@ -13,4 +13,4 @@ kérést összesen 10 alkalommal!
 */
 import { userHandler } from './userHandler.js';
 
-userHandler.showList('.list', 5, 10);
+userHandler.showList('.list', 2, 5);
