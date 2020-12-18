@@ -84,17 +84,13 @@ const userHandler = {
                 );
         }); */
     },
-    showList(parent, delay, repeatCount) {
+    async showList(parent, delay, repeatCount) {
+        parent = document.querySelector(parent);
         this.delay = delay;
         this.repeatCount = repeatCount;
-        parent = document.querySelector(parent);
-        this.getList().then(
-            list => {
-                this.generateList(parent, list);
-                localStorage.users = JSON.stringify(list);
-            },
-            err => console.error(err)
-        );
+        const list = await this.getList();
+        this.generateList(parent, list);
+        localStorage.users = JSON.stringify(list);
     },
     generateList(parent, list) {
         list.forEach(element => {
