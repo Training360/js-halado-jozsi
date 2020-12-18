@@ -33,10 +33,33 @@ const userHandler = {
     delay: 5,
     repeatCount: 10,
     repeatNum: 1,
-    getList(resolveFunc) {
-        return new Promise((res, rej) => {
+    url: 'http://localhost:3000/users',
+    async getList() {
+        while (this.repeatNum < this.repeatCount) {
+            try {
+                const response = await fetch(this.url);
+                const data = await response.json();
+                return data;
+            } catch(e) {
+                this.repeatNum++;
+                await new Promise( (res) => setTimeout(res, this.delay * 1000));
+                return this.getList();
+            }
+        }
+
+        this.repeatNum = 1;
+        alert('Az alkalmazás offline.');
+        if (localStorage.users) {
+            return JSON.parse(localStorage.users);
+        } else {
+            alert('A helyi tároló is üres.');
+            return [];
+        }
+
+
+        /* return new Promise((res, rej) => {
             res = resolveFunc ? resolveFunc : res;
-            fetch('http://localhost:3000/users')
+            fetch(url)
                 .then(response => res(response.json()))
                 .catch(
                     e => {
@@ -59,7 +82,7 @@ const userHandler = {
                         }
                     }
                 );
-        });
+        }); */
     },
     showList(parent, delay, repeatCount) {
         this.delay = delay;
